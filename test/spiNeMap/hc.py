@@ -1,5 +1,6 @@
 from numpy import arange
 from pyNN.utility import get_simulator
+from pyNN.carlsim import *
 import time
 # Configure the application (i.e) configure the additional
 # simualator parameters
@@ -44,12 +45,29 @@ randSeed = int(options.randSeed)
 # Start of application code
 ##################################################################
 sim.setup(timestep=0.01, min_delay=1.0, netName = netName, simMode = simMode, logMode = logMode, ithGPUs = ithGPUs, randSeed = randSeed)
-spike_source = sim.Population(1,sim.SpikeSourceArray("test",1,"excitatory", "COBA"))
-neurons = sim.Population(3, sim.Izhikevich(a=0.02, b=0.2, c=-65, d=6, i_offset=[0.014, 0.0, 0.0]))
-connection = sim.Projection(spike_source, neurons, sim.OneToOneConnector(),receptor_type='excitatory')
+
+print(sim)
+
+#sim.state.network.createSpikeGeneratorGroup("input", 784, EXCITATORY_NEURON)
+#sim.state.network.createGroup("smooth", 196, EXCITATORY_NEURON)
+#sim.state.network.setNeuronParameters(1, 0.02, 0.2, -65, 8)
+spike_source = sim.Population(196,sim.SpikeSourceArray("input",784,"excitatory", "CUBA"))
+neurons = sim.Population(196, sim.Izhikevich(a=0.02, b=0.2, c=-65, d=6, i_offset=[0.014, 0.0, 0.0]))
+#connection = sim.Projection(spike_source, neurons, sim.OneToOneConnector(),receptor_type='excitatory')
+
+connection = sim.state.network.connect(0, 1, str("one-to-one"), RangeWeight(2), 1, RangeDelay(1), RadiusRF(5,5,-1))
 
 sim.state.network.setupNetwork()
-print("Reached Here")
-sim.state.network.runNetwork(100, 0, True)
 
+neurons.record('spikes')
+
+sim.state.network.setConnectionMonitor(0,1, "DEFAULT")
+sim.state.network.setSpikeMonitor(0, "DEFAULT")
+sim.state.network.setSpikeMonitor(1, "DEFAULT")
+
+P = PoissonRate(int(196), bool(0))
+P.setRates(10)
+sim.state.network.setSpikeRate(0, P)
+sim.run(100)
+#sim.state.network.runNetwork(1, 0, True)
 #sim.state.end()

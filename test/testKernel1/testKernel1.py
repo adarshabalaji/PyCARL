@@ -1,11 +1,14 @@
+
+import time
+t = time.time()
 from numpy import arange
 from pyNN.utility import get_simulator
-from carlsim import *
-import time
+from pyNN.carlsim import *
+print(time.time() - t)
 # Configure the application (i.e) configure the additional
 # simualator parameters
 
-
+t = time.time()
 sim, options = get_simulator(("netName", "String for name of simulation"),("--gpuMode", "Enable GPU_MODE (CPU_MODE by default)", {"action":"store_true"}), ("logMode", "Enter logger mode (USER by default)", {"default":"USER"}), ("ithGPUs", "Number of GPUs"), ("randSeed", "Random seed"))
 
 ##################################################################
@@ -40,29 +43,48 @@ if (simMode == sim.CPU_MODE and int(ithGPUs) > 0 ):
 ithGPUs = 0
 
 randSeed = int(options.randSeed)
-
 ##################################################################
 # Start of application code
 ##################################################################
+
 sim.setup(timestep=0.01, min_delay=1.0, netName = netName, simMode = simMode, logMode = logMode, ithGPUs = ithGPUs, randSeed = randSeed)
 
-#sim.state.network.createSpikeGeneratorGroup("input", 784, EXCITATORY_NEURON)
-#sim.state.network.createGroup("smooth", 196, EXCITATORY_NEURON)
-#sim.state.network.setNeuronParameters(1, 0.02, 0.2, -65, 8)
-spike_source = sim.Population(196,sim.SpikeSourceArray("input",784,"excitatory", "CUBA"))
-neurons = sim.Population(196, sim.Izhikevich(a=0.02, b=0.2, c=-65, d=6, i_offset=[0.014, 0.0, 0.0]))
-#connection = sim.Projection(spike_source, neurons, sim.OneToOneConnector(),receptor_type='excitatory')
+numNeurons = 1 
 
-connection = sim.state.network.connect(0, 1, str("one-to-one"), RangeWeight(2), 1, RangeDelay(1), RadiusRF(5,5,-1))
 
-sim.state.network.setupNetwork()
+# define the neuron groups
+inputCellType = sim.SpikeSourceArray("input", numNeurons, "EXCITATORY_NEURON", "CUBA")
+spike_source = sim.Population(numNeurons, inputCellType)
 
-sim.state.network.setConnectionMonitor(0,1, "DEFAULT")
-sim.state.network.setSpikeMonitor(0, "DEFAULT")
-sim.state.network.setSpikeMonitor(1, "DEFAULT")
+izhikevichCellType = sim.Izhikevich("EXCITATORY_NEURON", a=0.02, b=0.2, c=-65, d=6, i_offset=[0.014, 0.0, 0.0])
+neuron_group1 = sim.Population(numNeurons, izhikevichCellType)
 
-P = PoissonRate(int(196), bool(0))
-P.setRates(10)
-sim.state.network.setSpikeRate(0, P)
-sim.state.network.runNetwork(1, 0, True)
-#sim.state.end()
+
+# connect the neuron groups
+connection = sim.Projection(spike_source, neuron_group1, sim.OneToOneConnector(),receptor_type='excitatory')
+
+sim.state.network.setConductances(bool(0))
+
+#sim.state.network.setIntegrationMethod(FORWARD_EULER, 10)
+
+# function has to be called before any record function is called. 
+sim.state.setupNetwork()
+
+neuron_group1.record('spikes')
+
+#P = PoissonRate(int(1), bool(0))
+#P.setRates(10)
+#sim.state.network.setSpikeRate(0, P)
+
+# start the recording of the groups
+
+
+# run the simulation for 100ms
+sim.run(100)
+sim.state.network.setExternalCurrent(1, 70)
+sim.run(900)
+
+print(time.time() - t)
+#t = time.time()
+# start the recording of the groups
+

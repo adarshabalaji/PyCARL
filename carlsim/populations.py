@@ -6,6 +6,8 @@ from . import simulator
 from .recording import Recorder
 from carlsim import *
 
+#synapse_type = ''
+
 class Assembly(common.Assembly):
     __doc__ = common.Assembly.__doc__
     _simulator = simulator
@@ -23,19 +25,25 @@ class Population(common.Population):
                                      dtype=simulator.ID)
         self._mask_local = numpy.ones((self.size,), bool)
 
-        if isinstance(self.celltype, cells.SpikeSourceArray):
-            self.carlsim_group = simulator.state.network.createSpikeGeneratorGroup(str(self.label), self.size, EXCITATORY_NEURON)
+        for id in self.all_cells:
+            id.parent = self
+        simulator.state.id_counter += self.size
+       
+	if isinstance(self.celltype, cells.SpikeSourceArray):
+            self.carlsim_group = simulator.state.network.createSpikeGeneratorGroup(str(self.label), self.size, self.celltype.type)
             #self.celltype.parameter_space._set_shape((3,))
             #self.celltype.parameter_space.evaluate()
         
         if isinstance(self.celltype, cells.Izhikevich):
-            self.carlsim_group = simulator.state.network.createGroup(str(self.label), self.size, EXCITATORY_NEURON)
+            self.carlsim_group = simulator.state.network.createGroup(str(self.label), self.size, self.celltype.type)
             #self.celltype.parameter_space._set_shape((self.size,))
-            self.celltype.parameter_space._set_shape((3,))
-            self.celltype.parameter_space.evaluate()
-            parameters = self.celltype.parameter_space.as_dict()
-            simulator.state.network.setNeuronParameters(self.carlsim_group, parameters['a'][0], parameters['b'][0],
-                                                        parameters['c'][0], parameters['d'][0])
+            #self.celltype.parameter_space._set_shape((3,))
+            #self.celltype.parameter_space.evaluate()
+            parameters = self.celltype.parameter_space
+            simulator.state.network.setNeuronParameters(self.carlsim_group, parameters['a'], parameters['b'],
+                                                        parameters['c'], parameters['d'])
+
+        #if not isinstance()
 
     def _set_initial_value_array(self, variable, initial_value):
         """
@@ -45,8 +53,17 @@ class Population(common.Population):
         :param initial_value:
         :return:
         """
+        pass
 
     def _get_view(self, selector, label=None):
         pass
 
-   #def record():	
+    def _get_parameters(self, parameter_space):
+        pass
+    
+    def _set_parameters(self, parameter_space):
+        pass
+
+class PopulationView(common.PopulationView):
+    _assembly_class = Assembly
+    _simulator = simulator
