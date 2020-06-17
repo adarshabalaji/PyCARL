@@ -1,4 +1,4 @@
-# PyCarlsim
+# PyCARL
 Files to interface CARLsim to the pyNN framework.
 
 # carlsim folder
