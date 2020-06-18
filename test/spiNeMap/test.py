@@ -49,7 +49,5 @@ neurons = sim.Population(3, sim.Izhikevich('EXCITATORY_NEURON', a=0.02, b=0.2, c
 #connection = sim.Projection(spike_source, neurons, sim.OneToOneConnector(),receptor_type='excitatory')
 
 sim.state.setupNetwork()
-
 sim.run(100)
 
-#sim.state.end()
