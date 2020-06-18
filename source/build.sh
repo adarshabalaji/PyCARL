@@ -1,10 +1,13 @@
 #!/usr/bin/env sh
 
+CARLSIM4_INSTALL_DIR=$(HOME)/CARL
+
 swig -c++ -python carlsim.i
 mkdir -p bin/
 mv carlsim.py bin/
 
-python2 setup.py build_ext -b ./bin/ -t ./bin/wrap --define __NO_CUDA__ --include ../CARLsim4/carlsim/kernel/inc/:../CARLsim4/carlsim/monitor/:../CARLsim4/carlsim/interface/inc/:../CARLsim4/tools/spike_generators/:../CARLsim4/tools/visual_stimulus/
+# TO BUILD FOR PYTHON2
+python2 setup.py build_ext -b ./bin/ -t ./bin/wrap --warnings --define __NO_CUDA__ --include /home/adarsha/CARL/include:/usr/local/cuda/include:/usr/local/cuda/samples/common/inc
 
 # TO BUILD FOR PYTHON3
 # swig -c++ -python -py3 carlsim.i

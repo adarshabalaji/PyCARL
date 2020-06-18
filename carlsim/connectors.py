@@ -28,6 +28,5 @@ from pyNN.connectors import AllToAllConnector, \
 
 class AllToAllConnector(AllToAllConnector):
 
-    def connect(self, projection):
-	sim.state.network.connect(projection.presynaptic_population.carlsim_group, projection.postsynaptic_population.carlsim_group, "one-to-one", EXCITATORY_NEURON)
-
+    def connect(self, projection, plasticity = SYN_STATIC, ):
+	simulator.state.network.connect(presynaptic_population.carlsim_group, postsynaptic_population.carlsim_group, "full")	

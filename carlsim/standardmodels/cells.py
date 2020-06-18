@@ -7,7 +7,7 @@ from ..carlsim import *
 class Izhikevich(cells.Izhikevich):
     __doc__ = cells.Izhikevich.__doc__
     
-    def __init__(self, type, a, b, c, d, i_offset):
+    def __init__(self, type, a, b, c, d):
 
         if type=='EXCITATORY_NEURON':
             self.type = EXCITATORY_NEURON
@@ -35,8 +35,6 @@ class SpikeSourceArray(cells.SpikeSourceArray):
             simulator.state.network.setConductances(False)
         if conductances == "COBA":
             simulator.state.network.setConductances(True)
-
-            simulator.state.network.setConductances(False)
         
         if type=='EXCITATORY_NEURON':
             self.type = EXCITATORY_NEURON

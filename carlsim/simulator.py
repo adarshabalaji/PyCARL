@@ -14,7 +14,8 @@ class ID(int, common.IDMixin):
         common.IDMixin.__init__(self)
 
 class State(common.control.BaseState):
-
+	groupIDs = []
+	connections = []
 	def __init__(self):
 		self.initsuccess = False
 		common.control.BaseState.__init__(self)
@@ -26,6 +27,9 @@ class State(common.control.BaseState):
 		self.randSeed 		= None
 		self.id_counter         = 0
                 self.num_processes      = 1
+		self.spikeMonitors = []
+		self.connMonitors = []
+		self.recordingGroups = []
                 self.clear()
 
 	def set_params_and_init(self, extra_params):
@@ -55,27 +59,36 @@ class State(common.control.BaseState):
 
 	def run(self, simtime):
             #simtime in PyNN is provided in milliseconds
-            nSec = simtime/1000
+            self._startRecordingSpikes()
+	    nSec = simtime/1000
             nMsec = simtime%1000
-            self.network.runNetwork(int(nSec), int(nMsec))	
-
+            self.network.runNetwork(int(nSec), int(nMsec))
+	 
 	def run_until(self, tstop):
 	    # get the present sim time compute the time to run until
+	    self._startRecordingSpikes()
             time = int(self.network.getSimTimeMsec())
             runtime=0
             if tstop > time:
                 runtime = tstop - time
-
             nSec = runtime/1000
             nMsec = runtime%1000
-            self.network.runNetwork(int(nSec), int(nMsec))	
-	
-        def setupNetwork(self):
+            self.network.runNetwork(int(nSec), int(nMsec))
+        
+	def setupNetwork(self):
             self.network.setupNetwork()
+	    self._setupSpikeMonitors()
+	    self._setupConnMonitors()
 
         def clear(self):
-	    pass	
-		
+	    pass
+	
+	def setHomeostasis(self, neuronGroupId, enableHomeostasis, alpha, T):
+	    self.network.setHomeostasis(neuronGroupId, enableHomeostasis, alpha, T)
+
+	def setHomeoBaseFiringRate(self, neuronGroupId, R_target, std):
+	    self.network.setHomeoBaseFiringRate(neuronGroupId, R_target, std)			
+
 	# cannot be implemented with CARLsim
         def reset(self):
 	    pass	
@@ -91,7 +104,21 @@ class State(common.control.BaseState):
 	
 	def _set_min_delay(self, delay):
 	   pass 
-
+	
+	def _setupSpikeMonitors(self):
+	   for id in self.groupIDs:
+	   	mon = self.network.setSpikeMonitor(id, "NULL")
+		self.spikeMonitors.append(mon)
+	
+	def _setupConnMonitors(self):
+	   for conn in self.connections:
+		conn._setConnectionMonitor("NULL")
+	
+	def _startRecordingSpikes(self):
+	   for id in self.recordingGroups:
+		mon = self.network.getSpikeMonitor(id)
+		if (mon.isRecording()):
+			mon.startRecording()
 ############################################################################
 # Params to suppress recording errors - not used otherwise
 ############################################################################

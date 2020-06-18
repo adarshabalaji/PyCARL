@@ -43,7 +43,7 @@ class Population(common.Population):
             simulator.state.network.setNeuronParameters(self.carlsim_group, parameters['a'], parameters['b'],
                                                         parameters['c'], parameters['d'])
 
-        #if not isinstance()
+        self._simulator.state.groupIDs.append(self.carlsim_group)
 
     def _set_initial_value_array(self, variable, initial_value):
         """

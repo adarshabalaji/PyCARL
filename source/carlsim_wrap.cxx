@@ -5263,24 +5263,23 @@ SWIGINTERN void std_vector_Sl_std_vector_Sl_float_Sg__Sg__insert__SWIG_1(std::ve
 
 
 /* Put headers and other declarations here */
-#include "../CARLsim4/carlsim/interface/inc/carlsim.h"
-#include "../CARLsim4/carlsim/interface/inc/carlsim_datastructures.h"
-#include "../CARLsim4/carlsim/interface/inc/carlsim_definitions.h"
-#include "../CARLsim4/carlsim/interface/inc/callback.h"
-#include "../CARLsim4/carlsim/interface/inc/poisson_rate.h"
-#include "../CARLsim4/carlsim/monitor/spike_monitor.h"
-#include "../CARLsim4/carlsim/monitor/connection_monitor.h"
-#include "../CARLsim4/carlsim/monitor/group_monitor.h"
-#include "../CARLsim4/carlsim/interface/inc/linear_algebra.h"
-#include "../CARLsim4/carlsim/kernel/inc/snn.h"
-#include "../CARLsim4/carlsim/kernel/inc/snn_datastructures.h"
-#include "../CARLsim4/carlsim/kernel/inc/error_code.h"
-#include "../CARLsim4/carlsim/kernel/inc/snn_definitions.h"
-#include "../CARLsim4/carlsim/kernel/inc/spike_buffer.h"
-#include "../CARLsim4/carlsim/kernel/inc/cuda_version_control.h"
-#include "../CARLsim4/tools/spike_generators/spikegen_from_vector.h"
-#include "../CARLsim4/tools/visual_stimulus/visual_stimulus.h"
-
+#include "../../carlsim/interface/inc/carlsim.h"
+#include "../../carlsim/interface/inc/carlsim_datastructures.h"
+#include "../../carlsim/interface/inc/carlsim_definitions.h"
+#include "../../carlsim/interface/inc/callback.h"
+#include "../../carlsim/interface/inc/poisson_rate.h"
+#include "../../carlsim/monitor/spike_monitor.h"
+#include "../../carlsim/monitor/connection_monitor.h"
+#include "../../carlsim/monitor/group_monitor.h"
+#include "../../carlsim/interface/inc/linear_algebra.h"
+#include "../../carlsim/kernel/inc/snn.h"
+#include "../../carlsim/kernel/inc/snn_datastructures.h"
+#include "../../carlsim/kernel/inc/error_code.h"
+#include "../../carlsim/kernel/inc/snn_definitions.h"
+#include "../../carlsim/kernel/inc/spike_buffer.h"
+//#include <../carlsim/kernel/inc/cuda_version_control.h>
+#include "../../tools/spike_generators/spikegen_from_vector.h"
+#include "../../tools/visual_stimulus/visual_stimulus.h"
 
 
 SWIGINTERN swig_type_info*
@@ -5481,6 +5480,24 @@ SWIG_AsValFilePtr(PyObject *obj, FILE **val) {
   return SWIG_TypeError;
 }
 
+SWIGINTERN std::vector< float,std::allocator< float > > ConnectionMonitor_takeSnapshot1D(ConnectionMonitor *self){
+                std::vector< std::vector<float> > weights = self->takeSnapshot();
+                int len = weights.size();
+                int length = len * weights[0].size();
+                std::vector<float> returnValues (length, 0);
+                for (int i = 0; i < len; i++){
+                        for (int j = 0; j < weights[0].size(); j++){
+                                returnValues[len*i + j] = weights[i][j];
+                        }
+                }
+		returnValues.push_back(weights[0].size());
+                return returnValues;
+        }
+SWIGINTERN void ConnectionMonitor_testPrint(ConnectionMonitor *self,std::vector< int,std::allocator< int > > data){
+                for (int x: data){
+                        printf("%i\n", x);
+                }
+        }
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -20419,6 +20436,37 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_CARLsim_getSpikeMonitor(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  CARLsim *arg1 = (CARLsim *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  SpikeMonitor *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:CARLsim_getSpikeMonitor",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_CARLsim, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CARLsim_getSpikeMonitor" "', argument " "1"" of type '" "CARLsim *""'"); 
+  }
+  arg1 = reinterpret_cast< CARLsim * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "CARLsim_getSpikeMonitor" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  result = (SpikeMonitor *)(arg1)->getSpikeMonitor(arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_SpikeMonitor, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_CARLsim_getSimTime(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   CARLsim *arg1 = (CARLsim *) 0 ;
@@ -22231,36 +22279,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ConnectionMonitor_setUpdateTimeIntervalSec(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  ConnectionMonitor *arg1 = (ConnectionMonitor *) 0 ;
-  int arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:ConnectionMonitor_setUpdateTimeIntervalSec",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_ConnectionMonitor, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ConnectionMonitor_setUpdateTimeIntervalSec" "', argument " "1"" of type '" "ConnectionMonitor *""'"); 
-  }
-  arg1 = reinterpret_cast< ConnectionMonitor * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ConnectionMonitor_setUpdateTimeIntervalSec" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  (arg1)->setUpdateTimeIntervalSec(arg2);
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_ConnectionMonitor_takeSnapshot(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   ConnectionMonitor *arg1 = (ConnectionMonitor *) 0 ;
@@ -22277,6 +22295,60 @@ SWIGINTERN PyObject *_wrap_ConnectionMonitor_takeSnapshot(PyObject *SWIGUNUSEDPA
   arg1 = reinterpret_cast< ConnectionMonitor * >(argp1);
   result = (arg1)->takeSnapshot();
   resultobj = swig::from(static_cast< std::vector< std::vector< float,std::allocator< float > >,std::allocator< std::vector< float,std::allocator< float > > > > >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ConnectionMonitor_takeSnapshot1D(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  ConnectionMonitor *arg1 = (ConnectionMonitor *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::vector< float,std::allocator< float > > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:ConnectionMonitor_takeSnapshot1D",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_ConnectionMonitor, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ConnectionMonitor_takeSnapshot1D" "', argument " "1"" of type '" "ConnectionMonitor *""'"); 
+  }
+  arg1 = reinterpret_cast< ConnectionMonitor * >(argp1);
+  result = ConnectionMonitor_takeSnapshot1D(arg1);
+  resultobj = swig::from(static_cast< std::vector< float,std::allocator< float > > >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ConnectionMonitor_testPrint(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  ConnectionMonitor *arg1 = (ConnectionMonitor *) 0 ;
+  std::vector< int,std::allocator< int > > arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ConnectionMonitor_testPrint",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_ConnectionMonitor, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ConnectionMonitor_testPrint" "', argument " "1"" of type '" "ConnectionMonitor *""'"); 
+  }
+  arg1 = reinterpret_cast< ConnectionMonitor * >(argp1);
+  {
+    std::vector< int,std::allocator< int > > *ptr = (std::vector< int,std::allocator< int > > *)0;
+    int res = swig::asptr(obj1, &ptr);
+    if (!SWIG_IsOK(res) || !ptr) {
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "ConnectionMonitor_testPrint" "', argument " "2"" of type '" "std::vector< int,std::allocator< int > >""'"); 
+    }
+    arg2 = *ptr;
+    if (SWIG_IsNewObj(res)) delete ptr;
+  }
+  ConnectionMonitor_testPrint(arg1,arg2);
+  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
@@ -29209,6 +29281,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"CARLsim_scaleWeights", _wrap_CARLsim_scaleWeights, METH_VARARGS, NULL},
 	 { (char *)"CARLsim_setExternalCurrent", _wrap_CARLsim_setExternalCurrent, METH_VARARGS, NULL},
 	 { (char *)"CARLsim_setSpikeGenerator", _wrap_CARLsim_setSpikeGenerator, METH_VARARGS, NULL},
+	 { (char *)"CARLsim_getSpikeMonitor", _wrap_CARLsim_getSpikeMonitor, METH_VARARGS, NULL},
 	 { (char *)"CARLsim_getSimTime", _wrap_CARLsim_getSimTime, METH_VARARGS, NULL},
 	 { (char *)"CARLsim_getSimTimeSec", _wrap_CARLsim_getSimTimeSec, METH_VARARGS, NULL},
 	 { (char *)"CARLsim_getSimTimeMsec", _wrap_CARLsim_getSimTimeMsec, METH_VARARGS, NULL},
@@ -29246,8 +29319,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ConnectionMonitor_getTotalAbsWeightChange", _wrap_ConnectionMonitor_getTotalAbsWeightChange, METH_VARARGS, NULL},
 	 { (char *)"ConnectionMonitor__print", _wrap_ConnectionMonitor__print, METH_VARARGS, NULL},
 	 { (char *)"ConnectionMonitor_printSparse", _wrap_ConnectionMonitor_printSparse, METH_VARARGS, NULL},
-	 { (char *)"ConnectionMonitor_setUpdateTimeIntervalSec", _wrap_ConnectionMonitor_setUpdateTimeIntervalSec, METH_VARARGS, NULL},
 	 { (char *)"ConnectionMonitor_takeSnapshot", _wrap_ConnectionMonitor_takeSnapshot, METH_VARARGS, NULL},
+	 { (char *)"ConnectionMonitor_takeSnapshot1D", _wrap_ConnectionMonitor_takeSnapshot1D, METH_VARARGS, NULL},
+	 { (char *)"ConnectionMonitor_testPrint", _wrap_ConnectionMonitor_testPrint, METH_VARARGS, NULL},
 	 { (char *)"ConnectionMonitor_swigregister", ConnectionMonitor_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_GroupMonitor", _wrap_new_GroupMonitor, METH_VARARGS, NULL},
 	 { (char *)"delete_GroupMonitor", _wrap_delete_GroupMonitor, METH_VARARGS, NULL},

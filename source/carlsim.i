@@ -27,30 +27,28 @@ namespace std {
 %{
 
 /* Put headers and other declarations here */
-#include "../CARLsim4/carlsim/interface/inc/carlsim.h"
-#include "../CARLsim4/carlsim/interface/inc/carlsim_datastructures.h"
-#include "../CARLsim4/carlsim/interface/inc/carlsim_definitions.h"
-#include "../CARLsim4/carlsim/interface/inc/callback.h"
-#include "../CARLsim4/carlsim/interface/inc/poisson_rate.h"
-#include "../CARLsim4/carlsim/monitor/spike_monitor.h"
-#include "../CARLsim4/carlsim/monitor/connection_monitor.h"
-#include "../CARLsim4/carlsim/monitor/group_monitor.h"
-#include "../CARLsim4/carlsim/interface/inc/linear_algebra.h"
-#include "../CARLsim4/carlsim/kernel/inc/snn.h"
-#include "../CARLsim4/carlsim/kernel/inc/snn_datastructures.h"
-#include "../CARLsim4/carlsim/kernel/inc/error_code.h"
-#include "../CARLsim4/carlsim/kernel/inc/snn_definitions.h"
-#include "../CARLsim4/carlsim/kernel/inc/spike_buffer.h"
-#include "../CARLsim4/carlsim/kernel/inc/cuda_version_control.h"
-#include "../CARLsim4/tools/spike_generators/spikegen_from_vector.h"
-#include "../CARLsim4/tools/visual_stimulus/visual_stimulus.h"
-
+#include "../../carlsim/interface/inc/carlsim.h"
+#include "../../carlsim/interface/inc/carlsim_datastructures.h"
+#include "../../carlsim/interface/inc/carlsim_definitions.h"
+#include "../../carlsim/interface/inc/callback.h"
+#include "../../carlsim/interface/inc/poisson_rate.h"
+#include "../../carlsim/monitor/spike_monitor.h"
+#include "../../carlsim/monitor/connection_monitor.h"
+#include "../../carlsim/monitor/group_monitor.h"
+#include "../../carlsim/interface/inc/linear_algebra.h"
+#include "../../carlsim/kernel/inc/snn.h"
+#include "../../carlsim/kernel/inc/snn_datastructures.h"
+#include "../../carlsim/kernel/inc/error_code.h"
+#include "../../carlsim/kernel/inc/snn_definitions.h"
+#include "../../carlsim/kernel/inc/spike_buffer.h"
+//#include <../carlsim/kernel/inc/cuda_version_control.h>
+#include "../../tools/spike_generators/spikegen_from_vector.h"
+#include "../../tools/visual_stimulus/visual_stimulus.h"
 %}
-
 
 #include <stopwatch.h>
 #include <time.h>
-
+#include <stdio.h>
 
 // explicitly menion the macros from C++ as the SWIG compiler needs to know about them 
 
@@ -147,7 +145,6 @@ enum CARLsimState {
 
 
 //CARLsim class and function prototypes can be found here and addition to the carlsim class shall be made here
-
 class CARLsim{
 	
 	public: 
@@ -247,8 +244,10 @@ class CARLsim{
 
 	void setExternalCurrent(int grpId, float current);
 	void setSpikeGenerator(int grpId, SpikeGenerator* spikeGenFunc);
-
-	int getSimTime();
+        
+        SpikeMonitor* getSpikeMonitor(int grpId);
+	
+        int getSimTime();
 	int getSimTimeSec();
 	int getSimTimeMsec();
 
@@ -278,7 +277,26 @@ public:
 };
 
 /////////////// ConnectionMonitor class ////////////
-
+%extend ConnectionMonitor {
+         std::vector<float> takeSnapshot1D(){
+                std::vector< std::vector<float> > weights = self->takeSnapshot();
+                int len = weights.size();
+                int length = len * weights[0].size();
+                std::vector<float> returnValues (length, 0);
+                for (int i = 0; i < len; i++){
+                        for (int j = 0; j < weights[0].size(); j++){
+                                returnValues[len*i + j] = weights[i][j];
+                        }
+                }
+		returnValues.push_back(weights[0].size());
+                return returnValues;
+        }
+        void testPrint(std::vector<int> data){
+                for (int x: data){
+                        printf("%i\n", x);
+                }
+        }
+}
 class ConnectionMonitor {
  public:
 
@@ -325,7 +343,7 @@ class ConnectionMonitor {
 	void printSparse(int neurPostId=ALL, int maxConn=100, int connPerLine=4);
 
 
-	void setUpdateTimeIntervalSec(int intervalSec);
+//	void setUpdateTimeIntervalSec(int intervalSec);
 
 	std::vector< std::vector<float> > takeSnapshot();
 
@@ -486,8 +504,6 @@ public:
 
 };
  
-  
-   
 class SpikeGeneratorFromVector : public SpikeGenerator {
 public:
     SpikeGeneratorFromVector(std::vector<int> spkTimes);

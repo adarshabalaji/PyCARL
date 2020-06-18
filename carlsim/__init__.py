@@ -5,7 +5,7 @@ CARLsim implementation of the PyNN API.
 :license: Mushti license DO NOT BREACH
 """
 
-from carlsim import *
+#from carlsim import *
 from . import simulator
 from .standardmodels.cells import *
 from pyNN.connectors import *
