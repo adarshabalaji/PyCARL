@@ -16,11 +16,11 @@ Files to interface CARLsim to the pyNN framework.
 
 #####################################################################################  
 
-#Installation 
+# Installation 
 
 ##################################################################################### 
 
-#1. Installing PyNN:  
+# 1. Installing PyNN:  
 
 $ pip install pyNN 
 
@@ -34,7 +34,7 @@ http://neuralensemble.org/docs/PyNN/installation.html
 
 
 
-#2. Compile and install PyCARL  
+# 2. Compile and install PyCARL  
 
 2.1 Clone the PyCARL repository to the CARLsim root.  
 
@@ -47,7 +47,7 @@ $ git clone https://github.com/adarshabalaji/PyCarlsim.git
 
 2.2 Compile and generate the pyNN -> carlsim  interface file (carlsim.py) 
 
-#2.2.1 Install SWIG:  
+# 2.2.1 Install SWIG:  
 
 $ sudo apt update 
 
@@ -67,7 +67,7 @@ This creates a static library _carlsim.so and a pyNN -> CARLsim interface (carls
 
 ###################################################################################### 
 
-#**OPTIONAL** If you want to compile and link the interface file manually, then   
+# **OPTIONAL** If you want to compile and link the interface file manually, then   
 
 
 3. 1 Compile the carlsim.i (interface file) using SWIG 
