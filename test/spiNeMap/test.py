@@ -44,12 +44,12 @@ randSeed = int(options.randSeed)
 # Start of application code
 ##################################################################
 sim.setup(timestep=0.01, min_delay=1.0, netName = netName, simMode = simMode, logMode = logMode, ithGPUs = ithGPUs, randSeed = randSeed)
-spike_source = sim.Population(1,sim.SpikeSourceArray("test",1,"excitatory", "COBA"))
+spike_source = sim.Population(1,sim.SpikeSourceArray("test",1,"excitatory", "CUBA"))
 neurons = sim.Population(3, sim.Izhikevich(a=0.02, b=0.2, c=-65, d=6, i_offset=[0.014, 0.0, 0.0]))
-connection = sim.Projection(spike_source, neurons, sim.OneToOneConnector(),receptor_type='excitatory')
+#connection = sim.Projection(spike_source, neurons, sim.OneToOneConnector(),receptor_type='excitatory')
 
 sim.state.setupNetwork()
-print("Reached Here")
-sim.run(100, callbacks=[])
+
+sim.run(100)
 
 #sim.state.end()
