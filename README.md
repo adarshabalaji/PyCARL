@@ -36,7 +36,7 @@ http://neuralensemble.org/docs/PyNN/installation.html
 
 2.1 Clone the PyCARL repository to the CARLsim root.  
 
-$ cd CARLsim4/PyCARL 
+$ cd CARLsim4/ 
 
 $ git clone https://github.com/adarshabalaji/PyCarlsim.git 
 
