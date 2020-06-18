@@ -1,15 +1,17 @@
 # PyCARL
 Files to interface CARLsim to the pyNN framework.
 
-# Command to run 
+# Command to run test.py with the CARLsim engine
+python test.py carlsim "test" USER 1 42
 
-# carlsim folder
+
+# Carlsim Folder
 1. /carlsim folder contains the python files required to interface pyNN to CARLsim4.
 2. The contents of /carlsim are generated using the contents in the source folder. 
  
 
 
-# source folder
+# Source Folder
 1. Follow the steps below to compile a new pyNN interface (carlsim.i and carlsim_wrap.cxx) with the static library libcarsim.a (generated during a
    CARLsim build). (command also in the notes folder)
 
