@@ -64,13 +64,24 @@ $ source build.sh
 This creates a static library _carlsim.so and a pyNN -> CARLsim interface (carlsim.py) 
 
  
+# 3. Copy the compiled sources and the carlsim/ folder in the pyCARL repo to pyNN.  
+
+$ cp –r CARLsim4/pyCARL/carlsim <root of pyNN Installation>  
+
+3.1 Copy the generated _carlsim.so and carlsim.py file to <root of pyNN Installation>/carlsim 
+
+ 
+PyCARL is now integrated with pyNN.  
+ 
+
+
 
 ###################################################################################### 
 
 # **OPTIONAL** If you want to compile and link the interface file manually, then   
 
 
-3. 1 Compile the carlsim.i (interface file) using SWIG 
+4.1 Compile the carlsim.i (interface file) using SWIG 
 
 $ cd source 
 
@@ -80,13 +91,13 @@ The output of the swig build is a wrapper file (carlsim_wrap.cxx) and the pyNN -
 
  
 
-3. 2 In the source folder, follow the steps below to compile a new pyNN interface (carlsim.i and carlsim_wrap.cxx) with the static library libcarsim.a (generated during a CARLsim build).  
+4.2 In the source folder, follow the steps below to compile a new pyNN interface (carlsim.i and carlsim_wrap.cxx) with the static library libcarsim.a (generated during a CARLsim build).  
 
 $gcc -fPIC -c carlsim_wrap.cxx -I/usr/include/python<version> -I<CARLsim4 include dir> -I/usr/local/cuda/include -I/usr/local/cuda/samples/common/inc -D__NO_CUDA__ 
 
 Update the above command with the python version of choice and the CARLsim4 installation directory. 
 
-3.1 Link the carlsim_wrap.o file to the libcarlsim.a file.  
+4.3 Link the carlsim_wrap.o file to the libcarlsim.a file.  
 
 $ g++ -shared carlsim_wrap.o -o _carlsim.so 
 
@@ -95,12 +106,4 @@ $ g++ -shared ~/CARL/lib/libcarlsim.a carlsim_wrap.o -o _carlsim.so
   
 ###################################################################################### 
 
-4. Copy the compiled sources and the carlsim/ folder in the pyCARL repo to pyNN.  
 
-$ cp –r CARLsim4/pyCARL/carlsim <root of pyNN Installation>  
-
-4.1 Copy the generated _carlsim.so and carlsim.py file to <root of pyNN Installation>/carlsim 
-
- 
-PyCARL is now integrated with pyNN.  
- 
