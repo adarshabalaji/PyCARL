@@ -10,13 +10,13 @@ class Recorder(recording.Recorder):
         self.event_output_files = []    
         self.displays = []
         self.output_files = []
-	self.spikeMonitor = None
+        self.spikeMonitor = None
 
     def _record(self, variable, to_file = None, sampling_interval=None):
-	if variable == 'spikes':
-		self._simulator.state.recordingGroups.append(self.population.carlsim_group)
-		#print(self._simulator.state.spikeIds)
+        if variable == 'spikes':
+            self._simulator.state.recordingGroups.append(self.population.carlsim_group)
+            #print(self._simulator.state.spikeIds)
     def start_recording(self):
-		self.spikeMonitor.startRecording()
+        self.spikeMonitor.startRecording()
     def stop_recording(self):
-		self.spikeMonitor.stopRecording()
+        self.spikeMonitor.stopRecording()

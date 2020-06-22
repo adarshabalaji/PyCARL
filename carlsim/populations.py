@@ -29,21 +29,21 @@ class Population(common.Population):
             id.parent = self
         simulator.state.id_counter += self.size
        
-	if isinstance(self.celltype, cells.SpikeSourceArray):
-            self.carlsim_group = simulator.state.network.createSpikeGeneratorGroup(str(self.label), self.size, self.celltype.type)
-            #self.celltype.parameter_space._set_shape((3,))
-            #self.celltype.parameter_space.evaluate()
-        
+        if isinstance(self.celltype, cells.SpikeSourceArray):
+            self.carlsim_group = simulator.state.network.createSpikeGeneratorGroup(str(self.label), self.size, self.celltype.type) #figure out how to decide neuron type
+            spikeGen = SpikeGeneratorFromVector(self.celltype.spike_times)
+            simulator.state.network.setSpikeGenerator(self.carlsim_group, spikeGen)
+            simulator.state.rateObjects.append(spikeGen) #Need this so spikeGen doesn't go out of scope. Need a better solution
+             
         if isinstance(self.celltype, cells.Izhikevich):
             self.carlsim_group = simulator.state.network.createGroup(str(self.label), self.size, self.celltype.type)
-            #self.celltype.parameter_space._set_shape((self.size,))
-            #self.celltype.parameter_space._set_shape((3,))
-            #self.celltype.parameter_space.evaluate()
             parameters = self.celltype.parameter_space
             simulator.state.network.setNeuronParameters(self.carlsim_group, parameters['a'], parameters['b'],
-                                                        parameters['c'], parameters['d'])
-
-        self._simulator.state.groupIDs.append(self.carlsim_group)
+                                                            parameters['c'], parameters['d'])
+        if isinstance(self.celltype, cells.SpikeSourcePoisson):
+            self.carlsim_group = simulator.state.network.createSpikeGeneratorGroup(str(self.label), self.size, self.celltype.type) #how to decide excit v inhib?
+            self._simulator.state.poissonObjects.append((self.carlsim_group, self.celltype.rate, self.size))
+            self._simulator.state.groupIDs.append(self.carlsim_group)
 
     def _set_initial_value_array(self, variable, initial_value):
         """

@@ -70,7 +70,7 @@ This creates a static library _carlsim.so and a pyNN -> CARLsim interface (carls
 
 $ cp –r CARLsim4/pyCARL/carlsim <root of pyNN Installation>  
 
-3.1 Copy the generated _carlsim.so and carlsim.py file to <root-of-pyNN-Installation>/carlsim 
+3.1 Copy the generated _carlsim.so and carlsim.py file to root-of-pyNN-Installation/carlsim 
 
  
 PyCARL is now integrated with pyNN.  
