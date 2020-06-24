@@ -28,21 +28,31 @@ class Population(common.Population):
         for id in self.all_cells:
             id.parent = self
         simulator.state.id_counter += self.size
-       
+        
+        if (isinstance(self.size, int)):
+            shape = self.size
+        elif (len(self.size) == 2):
+            shape = Grid3D(self.size[0],self.size[1], 1)
+        elif (len(self.size) == 3):
+            shape = Grid3D(self.size[0],self.size[1],self.size[2])
+        else:
+            print("really? How do you expect me to build a neural network in more than three dimensions?")
+            raise ValueError
+
         if isinstance(self.celltype, cells.SpikeSourceArray):
-            self.carlsim_group = simulator.state.network.createSpikeGeneratorGroup(str(self.label), self.size, self.celltype.type) #figure out how to decide neuron type
+            self.carlsim_group = simulator.state.network.createSpikeGeneratorGroup(str(self.label), shape, self.celltype.type) 
             spikeGen = SpikeGeneratorFromVector(self.celltype.spike_times)
             simulator.state.network.setSpikeGenerator(self.carlsim_group, spikeGen)
             simulator.state.rateObjects.append(spikeGen) #Need this so spikeGen doesn't go out of scope. Need a better solution
              
         if isinstance(self.celltype, cells.Izhikevich):
-            self.carlsim_group = simulator.state.network.createGroup(str(self.label), self.size, self.celltype.type)
+            self.carlsim_group = simulator.state.network.createGroup(str(self.label), shape, self.celltype.type)
             parameters = self.celltype.parameter_space
             simulator.state.network.setNeuronParameters(self.carlsim_group, parameters['a'], parameters['b'],
                                                             parameters['c'], parameters['d'])
         if isinstance(self.celltype, cells.SpikeSourcePoisson):
-            self.carlsim_group = simulator.state.network.createSpikeGeneratorGroup(str(self.label), self.size, self.celltype.type) #how to decide excit v inhib?
-            self._simulator.state.poissonObjects.append((self.carlsim_group, self.celltype.rate, self.size))
+            self.carlsim_group = simulator.state.network.createSpikeGeneratorGroup(str(self.label), shape, self.celltype.type) 
+            self._simulator.state.poissonObjects.append((self.carlsim_group, self.celltype.rate, numpy.prod(shape)))
             self._simulator.state.groupIDs.append(self.carlsim_group)
 
     def _set_initial_value_array(self, variable, initial_value):
