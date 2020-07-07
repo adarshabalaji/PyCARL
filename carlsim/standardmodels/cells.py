@@ -3,7 +3,7 @@ from pyNN.standardmodels import cells, build_translations
 from ..import simulator
 from ..carlsim import *
 import numpy as np
-
+from pyNN import models
 
 class Izhikevich(cells.Izhikevich):
     __doc__ = cells.Izhikevich.__doc__
@@ -67,3 +67,15 @@ class SpikeSourcePoisson(cells.SpikeSourcePoisson):
         #if (self.pars['duration'] != duration or self.pars['start'] != start):
         #print ("CARLsim does not support setting duration or start time for poisson objects. These parameters will be ignored")
 
+
+class SpikeSourceVisualStimulus(models.BaseCellType):
+    
+    def __init__(self, image, neuronType):
+        self.stim = simulator.VisualStimulus(image)
+        self.size = (self.stim.getWidth(), self.stim.getHeight(), self.stim.getChannels())
+        if neuronType=='EXCITATORY_NEURON':
+            self.type = EXCITATORY_NEURON
+        elif neuronType=='INHIBITORY_NEURON':
+            self.type = INHIBITORY_NEURON
+        else:
+            print("Neuron type not supported by pyCARL")

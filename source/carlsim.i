@@ -250,6 +250,7 @@ class CARLsim{
         int getSimTime();
 	int getSimTimeSec();
 	int getSimTimeMsec();
+    std::string getGroupName(int grpId);
 
 	/////////////////// setup and run network /////////////////
 

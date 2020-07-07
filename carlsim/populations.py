@@ -5,6 +5,7 @@ from pyNN.parameters import ParameterSpace, simplify
 from . import simulator
 from .recording import Recorder
 from carlsim import *
+from standardmodels.cells import SpikeSourceVisualStimulus
 
 #synapse_type = ''
 
@@ -54,7 +55,9 @@ class Population(common.Population):
             self.carlsim_group = simulator.state.network.createSpikeGeneratorGroup(str(self.label), shape, self.celltype.type) 
             self._simulator.state.poissonObjects.append((self.carlsim_group, self.celltype.rate, numpy.prod(shape)))
             self._simulator.state.groupIDs.append(self.carlsim_group)
-
+        if isinstance(self.celltype, SpikeSourceVisualStimulus):
+            self.carlsim_group = simulator.state.network.createSpikeGeneratorGroup(str(self.label), shape, self.celltype.type)
+            
     def _set_initial_value_array(self, variable, initial_value):
         """
         Empty method to suppress setting initial value
