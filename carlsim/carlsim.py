@@ -781,6 +781,9 @@ class CARLsim(_object):
     def createGroup(self, *args):
         return _carlsim.CARLsim_createGroup(self, *args)
 
+    def getNumSynapticConnections(self, connectionId):
+        return _carlsim.CARLsim_getNumSynapticConnections(self, connectionId)
+
     def connect(self, *args):
         return _carlsim.CARLsim_connect(self, *args)
 
@@ -975,9 +978,6 @@ class ConnectionMonitor(_object):
 
     def printSparse(self, neurPostId=-1, maxConn=100, connPerLine=4):
         return _carlsim.ConnectionMonitor_printSparse(self, neurPostId, maxConn, connPerLine)
-
-    def setUpdateTimeIntervalSec(self, intervalSec):
-        return _carlsim.ConnectionMonitor_setUpdateTimeIntervalSec(self, intervalSec)
 
     def takeSnapshot(self):
         return _carlsim.ConnectionMonitor_takeSnapshot(self)

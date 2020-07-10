@@ -1,4 +1,4 @@
-from carlsim import *
+from .carlsim import *
 import logging
 from pyNN import common
 from pyNN.common.control import DEFAULT_MAX_DELAY, DEFAULT_TIMESTEP, DEFAULT_MIN_DELAY

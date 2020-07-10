@@ -5,7 +5,7 @@ Connection method classes for the neuron module
 :license: CeCILL, see LICENSE for details.
 
 """
-import carlsim
+import .carlsim
 
 from pyNN.neuron import simulator
 from pyNN.connectors import AllToAllConnector, \

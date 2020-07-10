@@ -4,7 +4,7 @@ from pyNN.standardmodels import StandardCellType, cells
 from pyNN.parameters import ParameterSpace, simplify
 from . import simulator
 from .recording import Recorder
-from carlsim import *
+from .carlsim import *
 
 #synapse_type = ''
 

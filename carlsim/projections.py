@@ -1,5 +1,5 @@
 import numpy
-from carlsim import *
+from .carlsim import *
 from pyNN import common
 from . import simulator
 from .standardmodels.synapses import StaticSynapse, STDPMechanism

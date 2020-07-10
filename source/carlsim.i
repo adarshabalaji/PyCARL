@@ -165,6 +165,7 @@ class CARLsim{
 
 	int createGroup(const std::string& grpName, const Grid3D& grid, int neurType, int preferredPartition = ANY, ComputingBackend preferredBackend = CPU_CORES);
 
+    int getNumSynapticConnections(short int connectionId);
 ///////////////////// connection of the neuron groups /////////////////
 
 	short int connect(int grpId1, int grpId2, const std::string& connType, const RangeWeight& wt, float connProb,

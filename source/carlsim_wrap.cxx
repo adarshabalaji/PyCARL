@@ -5426,6 +5426,22 @@ SWIG_AsPtr_std_string (PyObject * obj, std::string **val)
 
 
 SWIGINTERN int
+SWIG_AsVal_short (PyObject * obj, short *val)
+{
+  long v;
+  int res = SWIG_AsVal_long (obj, &v);
+  if (SWIG_IsOK(res)) {
+    if ((v < SHRT_MIN || v > SHRT_MAX)) {
+      return SWIG_OverflowError;
+    } else {
+      if (val) *val = static_cast< short >(v);
+    }
+  }  
+  return res;
+}
+
+
+SWIGINTERN int
 SWIG_AsVal_bool (PyObject *obj, bool *val)
 {
   int r;
@@ -5443,22 +5459,6 @@ SWIGINTERNINLINE PyObject *
 SWIG_From_short  (short value)
 {    
   return SWIG_From_long  (value);
-}
-
-
-SWIGINTERN int
-SWIG_AsVal_short (PyObject * obj, short *val)
-{
-  long v;
-  int res = SWIG_AsVal_long (obj, &v);
-  if (SWIG_IsOK(res)) {
-    if ((v < SHRT_MIN || v > SHRT_MAX)) {
-      return SWIG_OverflowError;
-    } else {
-      if (val) *val = static_cast< short >(v);
-    }
-  }  
-  return res;
 }
 
 
@@ -16219,6 +16219,37 @@ fail:
     "    CARLsim::createGroup(std::string const &,Grid3D const &,int,int)\n"
     "    CARLsim::createGroup(std::string const &,Grid3D const &,int)\n");
   return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_CARLsim_getNumSynapticConnections(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  CARLsim *arg1 = (CARLsim *) 0 ;
+  short arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  short val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:CARLsim_getNumSynapticConnections",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_CARLsim, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "CARLsim_getNumSynapticConnections" "', argument " "1"" of type '" "CARLsim *""'"); 
+  }
+  arg1 = reinterpret_cast< CARLsim * >(argp1);
+  ecode2 = SWIG_AsVal_short(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "CARLsim_getNumSynapticConnections" "', argument " "2"" of type '" "short""'");
+  } 
+  arg2 = static_cast< short >(val2);
+  result = (int)(arg1)->getNumSynapticConnections(arg2);
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
 }
 
 
@@ -29260,6 +29291,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_CARLsim", _wrap_delete_CARLsim, METH_VARARGS, NULL},
 	 { (char *)"CARLsim_createSpikeGeneratorGroup", _wrap_CARLsim_createSpikeGeneratorGroup, METH_VARARGS, NULL},
 	 { (char *)"CARLsim_createGroup", _wrap_CARLsim_createGroup, METH_VARARGS, NULL},
+	 { (char *)"CARLsim_getNumSynapticConnections", _wrap_CARLsim_getNumSynapticConnections, METH_VARARGS, NULL},
 	 { (char *)"CARLsim_connect", _wrap_CARLsim_connect, METH_VARARGS, NULL},
 	 { (char *)"CARLsim_setConductances", _wrap_CARLsim_setConductances, METH_VARARGS, NULL},
 	 { (char *)"CARLsim_setNeuronParameters", _wrap_CARLsim_setNeuronParameters, METH_VARARGS, NULL},
