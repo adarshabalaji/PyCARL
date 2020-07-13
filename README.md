@@ -2,8 +2,9 @@
 Files to interface CARLsim to the pyNN framework.
 
 # Command to run test.py with the CARLsim engine
-python test.py carlsim "test" USER 1 42
-
+```
+$ python test.py carlsim "test" USER 1 42
+```
 
 # Carlsim Folder
 1. /carlsim folder contains the python files required to interface pyNN to CARLsim4.
