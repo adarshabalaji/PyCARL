@@ -1,4 +1,4 @@
-from carlsim import *
+from pyNN.carlsim.carlsim import *
 import logging
 from pyNN import common
 from pyNN.common.control import DEFAULT_MAX_DELAY, DEFAULT_TIMESTEP, DEFAULT_MIN_DELAY
@@ -101,6 +101,9 @@ class State(common.control.BaseState):
 
     def setHomeoBaseFiringRate(self, neuronGroupId, R_target, std):
         self.network.setHomeoBaseFiringRate(neuronGroupId, R_target, std)           
+
+    def setConductances(self, val):
+        self.network.setConductances(val)
 
     # cannot be implemented with CARLsim
     def reset(self):
