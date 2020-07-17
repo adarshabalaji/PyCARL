@@ -40,7 +40,7 @@ class SpikeSourceArray(cells.SpikeSourceArray):
             print("Neuron type not supported by pyCARL")
 
         for x in spike_times:
-            if (not isinstance(x, int)):
+            if (not isinstance(x, np.int64)):
                 print("Spike times cannot be sub-millisecond precision")
                 raise ValueError
 
@@ -72,10 +72,19 @@ class SpikeSourceVisualStimulus(models.BaseCellType):
     
     def __init__(self, image, neuronType):
         self.stim = simulator.VisualStimulus(image)
-        self.size = (self.stim.getWidth(), self.stim.getHeight(), self.stim.getChannels())
+        self.size = (int(self.stim.getWidth()), int(self.stim.getHeight()), int(self.stim.getChannels()))
+        self.length = self.stim.getLength()
         if neuronType=='EXCITATORY_NEURON':
             self.type = EXCITATORY_NEURON
         elif neuronType=='INHIBITORY_NEURON':
             self.type = INHIBITORY_NEURON
         else:
             print("Neuron type not supported by pyCARL")
+
+    def getNextFrame(self, group, maxRate, minRate = 0.0):
+        if (self.stim.getCurrentFrameNumber() >= self.length):
+            print("Tried to get frame past end of file.")
+            raise EOFError
+        rates = self.stim.readFramePoisson(maxRate, minRate)
+        simulator.state.network.setSpikeRate(group.carlsim_group, rates)
+

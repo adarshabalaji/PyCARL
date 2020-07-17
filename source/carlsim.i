@@ -27,22 +27,22 @@ namespace std {
 %{
 
 /* Put headers and other declarations here */
-#include "../../carlsim/interface/inc/carlsim.h"
-#include "../../carlsim/interface/inc/carlsim_datastructures.h"
-#include "../../carlsim/interface/inc/carlsim_definitions.h"
-#include "../../carlsim/interface/inc/callback.h"
-#include "../../carlsim/interface/inc/poisson_rate.h"
-#include "../../carlsim/monitor/spike_monitor.h"
-#include "../../carlsim/monitor/connection_monitor.h"
-#include "../../carlsim/monitor/group_monitor.h"
-#include "../../carlsim/interface/inc/linear_algebra.h"
-#include "../../carlsim/kernel/inc/snn.h"
-#include "../../carlsim/kernel/inc/snn_datastructures.h"
-#include "../../carlsim/kernel/inc/error_code.h"
-#include "../../carlsim/kernel/inc/snn_definitions.h"
-#include "../../carlsim/kernel/inc/spike_buffer.h"
+#include "../../CARLsim4/carlsim/interface/inc/carlsim.h"
+#include "../../CARLsim4/carlsim/interface/inc/carlsim_datastructures.h"
+#include "../../CARLsim4/carlsim/interface/inc/carlsim_definitions.h"
+#include "../../CARLsim4/carlsim/interface/inc/callback.h"
+#include "../../CARLsim4/carlsim/interface/inc/poisson_rate.h"
+#include "../../CARLsim4/carlsim/monitor/spike_monitor.h"
+#include "../../CARLsim4/carlsim/monitor/connection_monitor.h"
+#include "../../CARLsim4/carlsim/monitor/group_monitor.h"
+#include "../../CARLsim4/carlsim/interface/inc/linear_algebra.h"
+#include "../../CARLsim4/carlsim/kernel/inc/snn.h"
+#include "../../CARLsim4/carlsim/kernel/inc/snn_datastructures.h"
+#include "../../CARLsim4/carlsim/kernel/inc/error_code.h"
+#include "../../CARLsim4/carlsim/kernel/inc/snn_definitions.h"
+#include "../../CARLsim4/carlsim/kernel/inc/spike_buffer.h"
 //#include <../carlsim/kernel/inc/cuda_version_control.h>
-#include "../../tools/spike_generators/spikegen_from_vector.h"
+#include "../../CARLsim4/tools/spike_generators/spikegen_from_vector.h"
 #include "../../tools/visual_stimulus/visual_stimulus.h"
 %}
 
@@ -235,7 +235,7 @@ class CARLsim{
 	void setSTP(int grpId, bool isSet, float STP_U, float STP_tau_u, float STP_tau_x);	
 
 	void setWeightAndWeightChangeUpdate(UpdateInterval wtANDwtChangeUpdateInterval, bool enableWtChangeDecay, float wtChangeDecay=0.9f);
-	
+    void setWeight(short int connId, int neurIdPre, int neurIdPost, float weight, bool updateWeightRange = false);	
 	void saveSimulation(const std::string& fileName, bool saveSynapseInfo=true);
 	void biasWeights(short int connId, float bias, bool updateWeightRange=false);
 	void loadSimulation(FILE* fid);

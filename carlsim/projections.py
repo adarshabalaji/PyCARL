@@ -1,5 +1,5 @@
 import numpy
-from carlsim import *
+from pyNN.carlsim.carlsim import *
 from pyNN import common
 from . import simulator
 from .standardmodels.synapses import StaticSynapse, STDPMechanism
@@ -22,12 +22,12 @@ class Projection(common.Projection):
 
     def __init__(self, presynaptic_population, postsynaptic_population,
                  connector, synapse_type=None, source=None, receptor_type=None,
-                 space=None, label=None):
+                 space=None, label=None, radius = (-1,)):
         common.Projection.__init__(self, presynaptic_population, postsynaptic_population,
                                    connector, synapse_type, source, receptor_type,
                                    space, label)
         
-        nameMapping = {'OneToOneConnector': 'one-to-one', 'AllToAllConnector': "full", "FixedProbabilityConnector": "random", "FromListConnector": "FromListConnector"} #Doublecheck mapping for random
+        nameMapping = {'OneToOneConnector': 'one-to-one', 'AllToAllConnector': "full", "FixedProbabilityConnector": "random", "GaussianConnector": "gaussian"} #Doublecheck mapping for random
         if (connector.__class__.__name__ not in nameMapping.keys()):
             print("This connection type is currently unsupported by PyCARLsim.")
             raise NotImplemented  ##TODO implement custom exception
@@ -37,9 +37,8 @@ class Projection(common.Projection):
         plasticity = SYN_PLASTIC if isinstance(synapse_type, STDPMechanism) else SYN_FIXED  
 
         if isinstance(synapse_type.parameter_space['delay'], float):
-            print("CARLsim does not support floating point delays. Casting to int.") #Unit conversion issues here
+            print("CARLsim does not support floating point delays. Casting to int.") 
        
-        print(synapse_type) 
         if(isinstance(synapse_type, StaticSynapse)):
             weight, delay = synapse_type.parameter_space['weight'], int(synapse_type.parameter_space['delay'])
         else:
@@ -47,9 +46,9 @@ class Projection(common.Projection):
         
         maxWt = weight if plasticity is SYN_FIXED else 10*weight
     
-        self.connId = simulator.state.network.connect(presynaptic_population.carlsim_group, postsynaptic_population.carlsim_group, nameMapping[connector.__class__.__name__], RangeWeight(0,weight,maxWt),prob,RangeDelay(delay),RadiusRF(int(-1)), plasticity)
+        self.connId = simulator.state.network.connect(presynaptic_population.carlsim_group, postsynaptic_population.carlsim_group, nameMapping[connector.__class__.__name__], RangeWeight(0,weight,maxWt),prob,RangeDelay(delay),RadiusRF(*radius), plasticity)
 
-        if plasticity == SYN_PLASTIC: #test this!!
+        if plasticity == SYN_PLASTIC: 
             simulator.state.network.setESTDP(self.post.carlsim_group, True, STANDARD, ExpCurve(synapse_type.timing_dependence.parameter_space['A_plus'].base_value, synapse_type.timing_dependence.parameter_space['tau_minus'].base_value, synapse_type.timing_dependence.parameter_space['A_minus'].base_value\
             ,synapse_type.timing_dependence.parameter_space['tau_minus'].base_value))   
         simulator.state.connections.append(self)

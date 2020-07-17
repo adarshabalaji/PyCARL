@@ -5,9 +5,8 @@ Connection method classes for the neuron module
 :license: CeCILL, see LICENSE for details.
 
 """
-import carlsim
+import pyNN.carlsim.carlsim
 
-from pyNN.neuron import simulator
 from pyNN.connectors import AllToAllConnector, \
                             OneToOneConnector, \
                             FixedProbabilityConnector, \
@@ -27,6 +26,7 @@ from pyNN.connectors import AllToAllConnector, \
 
 
 class AllToAllConnector(AllToAllConnector):
+    pass
 
-    def connect(self, projection, plasticity = SYN_STATIC, ):
-	simulator.state.network.connect(presynaptic_population.carlsim_group, postsynaptic_population.carlsim_group, "full")	
+class GaussianConnector():
+    pass 
