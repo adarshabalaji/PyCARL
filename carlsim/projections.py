@@ -30,7 +30,7 @@ class Projection(common.Projection):
         nameMapping = {'OneToOneConnector': 'one-to-one', 'AllToAllConnector': "full", "FixedProbabilityConnector": "random", "GaussianConnector": "gaussian"} #Doublecheck mapping for random
         if (connector.__class__.__name__ not in nameMapping.keys()):
             print("This connection type is currently unsupported by PyCARLsim.")
-            raise NotImplemented  ##TODO implement custom exception
+            raise NotImplementedError  ##TODO implement custom exception
 
         #Move connection operation into sub-classes
         prob = 0.0 if not isinstance(connector, FixedProbabilityConnector) else connector.p_connect 
@@ -55,9 +55,27 @@ class Projection(common.Projection):
 
     def get(self, attribute_names, format, gather=True, with_address=True, multiple_synapses='sum'):
         return self._ConnectionMonitor.takeSnapshot()
+    
+    def set(self, **attributes):
+        #Currently only supports setting weights, and only supports scalars and lists as input parameters.
+        if ("weight" not in attributes or len(attributes) > 1):
+            raise NotImplementedError("set currently only supports modifying weights")
+        inp = attributes["weight"]
+        if isinstance(inp, list):
+            for i in range(0,len(inp)):
+                for j in range(0,len(inp[0])):
+                    simulator.state.network.setWeight(self.connId, i, j, inp[i][j])
+        elif (isinstance(inp, int) or isinstance(inp, float)):
+            for i in range(0,self.pre.size):
+                for j in range(0,self.post.size):
+                    simulator.state.network.setWeight(self.connId, i, j, inp)
+        else:
+            raise NotImplementedError(("Only lists and scalars are supported as input parameters!"))
+
     def _setConnectionMonitor(self, fName):
         self._ConnectionMonitor = simulator.state.network.setConnectionMonitor(self.pre.carlsim_group, self.post.carlsim_group, fName)
     def printWeights(self):
         self._ConnectionMonitor._print()
     def printWeightsSparse(self):
         self._ConnectionMonitor.printSparse()
+
