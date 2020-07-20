@@ -4,8 +4,8 @@ from pyNN.standardmodels import StandardCellType, cells
 from pyNN.parameters import ParameterSpace, simplify
 from . import simulator
 from .recording import Recorder
-from carlsim import *
-from standardmodels.cells import SpikeSourceVisualStimulus
+from pyNN.carlsim.carlsim import *
+from pyNN.carlsim.standardmodels.cells import SpikeSourceVisualStimulus
 
 #synapse_type = ''
 
@@ -46,18 +46,27 @@ class Population(common.Population):
             simulator.state.network.setSpikeGenerator(self.carlsim_group, spikeGen)
             simulator.state.rateObjects.append(spikeGen) #Need this so spikeGen doesn't go out of scope. Need a better solution
              
-        if isinstance(self.celltype, cells.Izhikevich):
+        elif isinstance(self.celltype, cells.Izhikevich):
             self.carlsim_group = simulator.state.network.createGroup(str(self.label), shape, self.celltype.type)
             parameters = self.celltype.parameter_space
             simulator.state.network.setNeuronParameters(self.carlsim_group, parameters['a'], parameters['b'],
                                                             parameters['c'], parameters['d'])
-        if isinstance(self.celltype, cells.SpikeSourcePoisson):
+        elif isinstance(self.celltype, cells.SpikeSourcePoisson):
             self.carlsim_group = simulator.state.network.createSpikeGeneratorGroup(str(self.label), shape, self.celltype.type) 
             self._simulator.state.poissonObjects.append((self.carlsim_group, self.celltype.rate, numpy.prod(shape)))
             self._simulator.state.groupIDs.append(self.carlsim_group)
-        if isinstance(self.celltype, SpikeSourceVisualStimulus):
+        
+        elif isinstance(self.celltype, SpikeSourceVisualStimulus):
             self.carlsim_group = simulator.state.network.createSpikeGeneratorGroup(str(self.label), shape, self.celltype.type)
-            
+        
+        elif isinstance(self.celltype, cells.IF_cond_exp_gsfa_grr):
+            self.carlsim_group = simulator.state.network.createGroupLIF(str(self.label), shape, self.celltype.type)
+            parms = self.celltype.parameter_space
+            simulator.state.network.setNeuronParameters(self.carlsim_group, parms['tau_m'], parms['tau_refrac'], parms['v_thresh'], parms['v_reset'])
+        
+        else:
+            raise ValueError("Unsupported cell type!")
+
     def _set_initial_value_array(self, variable, initial_value):
         """
         Empty method to suppress setting initial value

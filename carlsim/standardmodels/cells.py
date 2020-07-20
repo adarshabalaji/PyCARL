@@ -5,6 +5,24 @@ from ..carlsim import *
 import numpy as np
 from pyNN import models
 
+
+class IF_cond_exp_gsfa_grr(cells.IF_cond_exp_gsfa_grr):
+    __doc__ = cells.IF_cond_exp_gsfa_grr.__doc__
+    def __init__(self, neuronType, tau_m, tau_refrac, v_thresh, v_reset):
+        if neuronType=='EXCITATORY_NEURON':                                                                                         self.type = EXCITATORY_NEURON
+        elif neuronType=='INHIBITORY_NEURON':
+            self.type = INHIBITORY_NEURON
+        else:
+            raise ValueError("Neuron type not supported by pyCARL")
+        self.parameter_space = {'tau_m': tau_m, 'tau_refrac': tau_refrac, 'v_thresh': v_thresh, 'v_reset': v_reset}
+        self.translations = build_translations(
+                ('tau_m', 'tau_m'),
+                ('tau_refrac', 'tau_ref'),
+                ('v_thresh', 'vTh'),
+                ('v_reset', 'vReset'),
+        )
+
+
 class Izhikevich(cells.Izhikevich):
     __doc__ = cells.Izhikevich.__doc__
     def __init__(self, neuronType, a, b, c, d):
@@ -87,4 +105,4 @@ class SpikeSourceVisualStimulus(models.BaseCellType):
             raise EOFError
         rates = self.stim.readFramePoisson(maxRate, minRate)
         simulator.state.network.setSpikeRate(group.carlsim_group, rates)
-
+ 
