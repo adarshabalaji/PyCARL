@@ -1,0 +1,7 @@
+source/build
+source/carlsim_wrap.cxx
+
+source/bin
+source/carlsim.py
+source/CARLsim4
+source/_carlsim.cpython-36m-x86_64-linux-gnu.so
