@@ -19,7 +19,7 @@ class testCells(unittest.TestCase):
         sim.Projection(gLIF, gDummy, sim.AllToAllConnector(), sim.StaticSynapse(weight = 0.05, delay = 1))
 
         sim.state.network.setConductances(False)
-
+        sim.state.network.setIntegrationMethod(sim.FORWARD_EULER, 1)
         sim.state.network.setupNetwork()
 
         smLIF = sim.state.network.setSpikeMonitor(gLIF.carlsim_group, "NULL")

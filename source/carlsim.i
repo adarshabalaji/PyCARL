@@ -141,8 +141,12 @@ enum CARLsimState {
 	SETUP_STATE,		//!< setup state, where the neural network is prepared for execution and monitors are set
 	RUN_STATE			//!< run state, where the model is stepped
 };
-
-
+// Used for LIF unit test
+enum integrationMethod_t {
+    FORWARD_EULER,
+    RUNGE_KUTTA4,
+    UNKNOWN_INTEGRATION
+};
 
 //CARLsim class and function prototypes can be found here and addition to the carlsim class shall be made here
 class CARLsim{
@@ -197,7 +201,7 @@ class CARLsim{
 		// set standard deviations of Izzy params to zero
 		snn_->setNeuronParameters(grpId, izh_a, 0.0, izh_b, 0.0, izh_c, 0.0, izh_d, 0.0);
 	}
-
+    void setNeuronParametersLIF(int grpId, int tau_m, int tau_ref = 0, float Vth = 1.0f, float vReset = 0.0f, const RangeRmem & rMem = RangeRmem(1.0f));
 	void setSpikeRate(int grpId, PoissonRate* spikeRate, int refPeriod=1);
 
 
@@ -254,6 +258,8 @@ class CARLsim{
 	int getSimTimeSec();
 	int getSimTimeMsec();
     std::string getGroupName(int grpId);
+    int getNumSynapticConnections(short int connectionId); 
+    void setIntegrationMethod(integrationMethod_t method, int numStepsPerMs);
 
 	/////////////////// setup and run network /////////////////
 
@@ -779,4 +785,15 @@ struct RadiusRF {
 
 
 	double radX, radY, radZ;
+};
+
+struct RangeRmem {
+    RangeRmem(double _minRmem, double _maxRmem) {
+        maxRmem = _maxRmem;
+        minRmem = _minRmem;
+    }
+    RangeRmem(double _rMem) {
+        maxRmem = _rMem;
+        minRmem = _rMem;
+    }
 };
