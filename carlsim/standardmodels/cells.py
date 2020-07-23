@@ -8,7 +8,7 @@ from pyNN import models
 
 class IF_cond_exp_gsfa_grr(cells.IF_cond_exp_gsfa_grr):
     __doc__ = cells.IF_cond_exp_gsfa_grr.__doc__
-    def __init__(self, neuronType, tau_m, tau_refrac, v_thresh, v_reset):
+    def __init__(self, neuronType, tau_m, tau_refrac, v_thresh, v_reset, rMem = None):
         if neuronType=='EXCITATORY_NEURON':                                                                                         self.type = EXCITATORY_NEURON
         elif neuronType=='INHIBITORY_NEURON':
             self.type = INHIBITORY_NEURON
@@ -21,6 +21,10 @@ class IF_cond_exp_gsfa_grr(cells.IF_cond_exp_gsfa_grr):
                 ('v_thresh', 'vTh'),
                 ('v_reset', 'vReset'),
         )
+        if (rMem is not None):
+            self.rMem = rMem
+        else:
+            self.rMem = RangeRmem(1.0)
 
 
 class Izhikevich(cells.Izhikevich):
@@ -58,7 +62,7 @@ class SpikeSourceArray(cells.SpikeSourceArray):
             print("Neuron type not supported by pyCARL")
 
         for x in spike_times:
-            if (not isinstance(x, np.int64)):
+            if (not isinstance(x, np.int64) and not isinstance(x, int)):
                 print("Spike times cannot be sub-millisecond precision")
                 raise ValueError
 

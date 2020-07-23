@@ -19,6 +19,7 @@ namespace std {
 	%template(vectord) vector<double>;
     %template(vectorf) vector<float>;
     %template(vectorvf) vector<vector<float>>;
+    %template(vectorvi) vector<vector<int>>;
 };
 
 // creating a module in SWIG and addign the required hearders to it
@@ -260,6 +261,7 @@ class CARLsim{
     std::string getGroupName(int grpId);
     int getNumSynapticConnections(short int connectionId); 
     void setIntegrationMethod(integrationMethod_t method, int numStepsPerMs);
+    Grid3D getGroupGrid3D(int gId);
 
 	/////////////////// setup and run network /////////////////
 

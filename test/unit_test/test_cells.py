@@ -30,7 +30,28 @@ class testCells(unittest.TestCase):
             smLIF.startRecording()
             sim.state.network.runNetwork(10, 0)
             smLIF.stopRecording()
-            print(smLIF.getPopMeanFiringRate())
-            print(rates[i])
-            print("\n")
-            #self.assertAlmostEqual(smLIF.getPopMeanFiringRate(), rates[i], delta = 0.5)
+            self.assertAlmostEqual(smLIF.getPopMeanFiringRate(), rates[i], delta = 0.5)
+    def testSpikeSourceArray(self):
+        spikeTimes = [13, 42, 99, 102, 200, 523, 738, 820, 821, 912, 989]
+        nNeur = 5
+        cell = sim.Izhikevich("EXCITATORY_NEURON", 0.02, 0.2, -65, 8)
+        spike = sim.SpikeSourceArray("EXCITATORY_NEURON", spike_times = spikeTimes)
+
+        g1 = sim.Population(1, cell)
+        g0 = sim.Population(nNeur, spike)
+        
+        sim.state.network.setConductances(True)
+
+        c0 = sim.Projection(g0, g1, sim.FixedProbabilityConnector(p_connect = 0.5), sim.StaticSynapse(weight = 0.01, delay = 1))
+
+        sim.state.network.setupNetwork()
+        sm = sim.state.network.setSpikeMonitor(g0.carlsim_group, "NULL")
+        sm.startRecording()
+        sim.state.network.runNetwork(1,0)
+        sm.stopRecording()
+
+        results = sm.getSpikeVector2D()
+        print(results)
+        self.assertEqual(len(results), 5)
+        for neuron in results:
+            self.assertEqual(neuron, tuple(spikeTimes))

@@ -612,6 +612,119 @@ class vectorvf(_object):
 vectorvf_swigregister = _carlsim.vectorvf_swigregister
 vectorvf_swigregister(vectorvf)
 
+class vectorvi(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, vectorvi, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, vectorvi, name)
+    __repr__ = _swig_repr
+
+    def iterator(self) -> "swig::SwigPyIterator *":
+        return _carlsim.vectorvi_iterator(self)
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self) -> "bool":
+        return _carlsim.vectorvi___nonzero__(self)
+
+    def __bool__(self) -> "bool":
+        return _carlsim.vectorvi___bool__(self)
+
+    def __len__(self) -> "std::vector< std::vector< int > >::size_type":
+        return _carlsim.vectorvi___len__(self)
+
+    def __getslice__(self, i: 'std::vector< std::vector< int > >::difference_type', j: 'std::vector< std::vector< int > >::difference_type') -> "std::vector< std::vector< int,std::allocator< int > >,std::allocator< std::vector< int,std::allocator< int > > > > *":
+        return _carlsim.vectorvi___getslice__(self, i, j)
+
+    def __setslice__(self, *args) -> "void":
+        return _carlsim.vectorvi___setslice__(self, *args)
+
+    def __delslice__(self, i: 'std::vector< std::vector< int > >::difference_type', j: 'std::vector< std::vector< int > >::difference_type') -> "void":
+        return _carlsim.vectorvi___delslice__(self, i, j)
+
+    def __delitem__(self, *args) -> "void":
+        return _carlsim.vectorvi___delitem__(self, *args)
+
+    def __getitem__(self, *args) -> "std::vector< std::vector< int > >::value_type const &":
+        return _carlsim.vectorvi___getitem__(self, *args)
+
+    def __setitem__(self, *args) -> "void":
+        return _carlsim.vectorvi___setitem__(self, *args)
+
+    def pop(self) -> "std::vector< std::vector< int > >::value_type":
+        return _carlsim.vectorvi_pop(self)
+
+    def append(self, x: 'vectori') -> "void":
+        return _carlsim.vectorvi_append(self, x)
+
+    def empty(self) -> "bool":
+        return _carlsim.vectorvi_empty(self)
+
+    def size(self) -> "std::vector< std::vector< int > >::size_type":
+        return _carlsim.vectorvi_size(self)
+
+    def swap(self, v: 'vectorvi') -> "void":
+        return _carlsim.vectorvi_swap(self, v)
+
+    def begin(self) -> "std::vector< std::vector< int > >::iterator":
+        return _carlsim.vectorvi_begin(self)
+
+    def end(self) -> "std::vector< std::vector< int > >::iterator":
+        return _carlsim.vectorvi_end(self)
+
+    def rbegin(self) -> "std::vector< std::vector< int > >::reverse_iterator":
+        return _carlsim.vectorvi_rbegin(self)
+
+    def rend(self) -> "std::vector< std::vector< int > >::reverse_iterator":
+        return _carlsim.vectorvi_rend(self)
+
+    def clear(self) -> "void":
+        return _carlsim.vectorvi_clear(self)
+
+    def get_allocator(self) -> "std::vector< std::vector< int > >::allocator_type":
+        return _carlsim.vectorvi_get_allocator(self)
+
+    def pop_back(self) -> "void":
+        return _carlsim.vectorvi_pop_back(self)
+
+    def erase(self, *args) -> "std::vector< std::vector< int > >::iterator":
+        return _carlsim.vectorvi_erase(self, *args)
+
+    def __init__(self, *args):
+        this = _carlsim.new_vectorvi(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def push_back(self, x: 'vectori') -> "void":
+        return _carlsim.vectorvi_push_back(self, x)
+
+    def front(self) -> "std::vector< std::vector< int > >::value_type const &":
+        return _carlsim.vectorvi_front(self)
+
+    def back(self) -> "std::vector< std::vector< int > >::value_type const &":
+        return _carlsim.vectorvi_back(self)
+
+    def assign(self, n: 'std::vector< std::vector< int > >::size_type', x: 'vectori') -> "void":
+        return _carlsim.vectorvi_assign(self, n, x)
+
+    def resize(self, *args) -> "void":
+        return _carlsim.vectorvi_resize(self, *args)
+
+    def insert(self, *args) -> "void":
+        return _carlsim.vectorvi_insert(self, *args)
+
+    def reserve(self, n: 'std::vector< std::vector< int > >::size_type') -> "void":
+        return _carlsim.vectorvi_reserve(self, n)
+
+    def capacity(self) -> "std::vector< std::vector< int > >::size_type":
+        return _carlsim.vectorvi_capacity(self)
+    __swig_destroy__ = _carlsim.delete_vectorvi
+    __del__ = lambda self: None
+vectorvi_swigregister = _carlsim.vectorvi_swigregister
+vectorvi_swigregister(vectorvi)
+
 SYN_FIXED = _carlsim.SYN_FIXED
 SYN_PLASTIC = _carlsim.SYN_PLASTIC
 TARGET_AMPA = _carlsim.TARGET_AMPA
@@ -662,6 +775,9 @@ INTERVAL_1000MS = _carlsim.INTERVAL_1000MS
 CONFIG_STATE = _carlsim.CONFIG_STATE
 SETUP_STATE = _carlsim.SETUP_STATE
 RUN_STATE = _carlsim.RUN_STATE
+FORWARD_EULER = _carlsim.FORWARD_EULER
+RUNGE_KUTTA4 = _carlsim.RUNGE_KUTTA4
+UNKNOWN_INTEGRATION = _carlsim.UNKNOWN_INTEGRATION
 class CARLsim(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, CARLsim, name, value)
@@ -695,6 +811,9 @@ class CARLsim(_object):
 
     def setNeuronParameters(self, grpId: 'int', izh_a: 'float', izh_b: 'float', izh_c: 'float', izh_d: 'float') -> "void":
         return _carlsim.CARLsim_setNeuronParameters(self, grpId, izh_a, izh_b, izh_c, izh_d)
+
+    def setNeuronParametersLIF(self, *args) -> "void":
+        return _carlsim.CARLsim_setNeuronParametersLIF(self, *args)
 
     def setSpikeRate(self, grpId: 'int', spikeRate: 'PoissonRate', refPeriod: 'int'=1) -> "void":
         return _carlsim.CARLsim_setSpikeRate(self, grpId, spikeRate, refPeriod)
@@ -767,6 +886,15 @@ class CARLsim(_object):
 
     def getGroupName(self, grpId: 'int') -> "std::string":
         return _carlsim.CARLsim_getGroupName(self, grpId)
+
+    def getNumSynapticConnections(self, connectionId: 'short') -> "int":
+        return _carlsim.CARLsim_getNumSynapticConnections(self, connectionId)
+
+    def setIntegrationMethod(self, method: 'integrationMethod_t', numStepsPerMs: 'int') -> "void":
+        return _carlsim.CARLsim_setIntegrationMethod(self, method, numStepsPerMs)
+
+    def getGroupGrid3D(self, gId: 'int') -> "Grid3D":
+        return _carlsim.CARLsim_getGroupGrid3D(self, gId)
 
     def startTesting(self, updateWeights: 'bool'=True) -> "void":
         return _carlsim.CARLsim_startTesting(self, updateWeights)
@@ -1583,6 +1711,24 @@ class RadiusRF(_object):
     __del__ = lambda self: None
 RadiusRF_swigregister = _carlsim.RadiusRF_swigregister
 RadiusRF_swigregister(RadiusRF)
+
+class RangeRmem(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, RangeRmem, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, RangeRmem, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        this = _carlsim.new_RangeRmem(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _carlsim.delete_RangeRmem
+    __del__ = lambda self: None
+RangeRmem_swigregister = _carlsim.RangeRmem_swigregister
+RangeRmem_swigregister(RangeRmem)
 
 # This file is compatible with both classic and new-style classes.
 
