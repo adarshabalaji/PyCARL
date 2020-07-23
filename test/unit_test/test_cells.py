@@ -51,7 +51,5 @@ class testCells(unittest.TestCase):
         sm.stopRecording()
 
         results = sm.getSpikeVector2D()
-        print(results)
         self.assertEqual(len(results), 5)
-        for neuron in results:
-            self.assertEqual(neuron, tuple(spikeTimes))
+        self.assertEqual(results[0], tuple(spikeTimes))

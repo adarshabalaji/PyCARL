@@ -8,6 +8,10 @@ class StaticSynapse(synapses.StaticSynapse):
     __doc__ = synapses.StaticSynapse.__doc__
     parameter_space = {}
     def __init__(self, weight=1.0, delay=None):
+        if (weight < 0):
+            raise ValueError("Weight must be non-negative!")
+        if (delay < 1):
+            raise ValueError("Delay cannot be less than one ms!")
         self.weight = weight
         self.delay = delay
         self.parameter_space['weight'] = weight
