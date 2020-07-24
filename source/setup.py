@@ -26,7 +26,8 @@ carlsim_module = Extension('_carlsim',
                            '../../CARLsim4/carlsim/monitor/neuron_monitor.cpp',
                            '../../CARLsim4/carlsim/monitor/neuron_monitor_core.cpp',
                            '../../CARLsim4/tools/spike_generators/spikegen_from_vector.cpp',
-                           '../../CARLsim4/tools/visual_stimulus/visual_stimulus.cpp'
+                           '../../CARLsim4/tools/visual_stimulus/visual_stimulus.cpp',
+			   '../../CARLsim4/carlsim/test/carlsim_tests_common.cpp'
                            ]
                            )
 

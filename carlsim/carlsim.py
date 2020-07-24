@@ -896,6 +896,9 @@ class CARLsim(_object):
     def getGroupGrid3D(self, gId: 'int') -> "Grid3D":
         return _carlsim.CARLsim_getGroupGrid3D(self, gId)
 
+    def getGroupSTDPInfo(self, grpId: 'int') -> "GroupSTDPInfo":
+        return _carlsim.CARLsim_getGroupSTDPInfo(self, grpId)
+
     def startTesting(self, updateWeights: 'bool'=True) -> "void":
         return _carlsim.CARLsim_startTesting(self, updateWeights)
 
@@ -1730,6 +1733,10 @@ class RangeRmem(_object):
 RangeRmem_swigregister = _carlsim.RangeRmem_swigregister
 RangeRmem_swigregister(RangeRmem)
 
+
+def readAndReturnSpikeFile(filename: 'std::string const', AERArray: 'int *&', arraySize: 'long &') -> "void":
+    return _carlsim.readAndReturnSpikeFile(filename, AERArray, arraySize)
+readAndReturnSpikeFile = _carlsim.readAndReturnSpikeFile
 # This file is compatible with both classic and new-style classes.
 
 

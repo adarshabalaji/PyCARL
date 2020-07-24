@@ -48,7 +48,7 @@ class Projection(common.Projection):
         self.connId = simulator.state.network.connect(presynaptic_population.carlsim_group, postsynaptic_population.carlsim_group, nameMapping[connector.__class__.__name__], RangeWeight(0,weight,maxWt),prob,RangeDelay(delay), self.rad, plasticity)
 
         if plasticity == SYN_PLASTIC: 
-            simulator.state.network.setESTDP(self.post.carlsim_group, True, STANDARD, ExpCurve(synapse_type.timing_dependence.parameter_space['A_plus'].base_value, synapse_type.timing_dependence.parameter_space['tau_minus'].base_value, synapse_type.timing_dependence.parameter_space['A_minus'].base_value\
+            simulator.state.network.setESTDP(self.post.carlsim_group, True, STANDARD, ExpCurve(synapse_type.timing_dependence.parameter_space['A_plus'].base_value, synapse_type.timing_dependence.parameter_space['tau_plus'].base_value, synapse_type.timing_dependence.parameter_space['A_minus'].base_value\
             ,synapse_type.timing_dependence.parameter_space['tau_minus'].base_value))   
         simulator.state.connections.append(self)
 

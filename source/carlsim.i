@@ -45,6 +45,7 @@ namespace std {
 //#include <../carlsim/kernel/inc/cuda_version_control.h>
 #include "../../CARLsim4/tools/spike_generators/spikegen_from_vector.h"
 #include "../../tools/visual_stimulus/visual_stimulus.h"
+#include "../../CARLsim4/carlsim/test/carlsim_tests.h"
 %}
 
 #include <stopwatch.h>
@@ -148,6 +149,7 @@ enum integrationMethod_t {
     RUNGE_KUTTA4,
     UNKNOWN_INTEGRATION
 };
+
 
 //CARLsim class and function prototypes can be found here and addition to the carlsim class shall be made here
 class CARLsim{
@@ -262,6 +264,7 @@ class CARLsim{
     int getNumSynapticConnections(short int connectionId); 
     void setIntegrationMethod(integrationMethod_t method, int numStepsPerMs);
     Grid3D getGroupGrid3D(int gId);
+    GroupSTDPInfo getGroupSTDPInfo(int grpId);
 
 	/////////////////// setup and run network /////////////////
 
@@ -799,3 +802,5 @@ struct RangeRmem {
         minRmem = _rMem;
     }
 };
+
+void readAndReturnSpikeFile(const std::string filename, int*& AERArray, long &arraySize);
